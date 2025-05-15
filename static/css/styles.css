@@ -1,0 +1,60 @@
+body {
+    font-family: sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    margin: 0;
+    background-color: #f0f0f0;
+}
+
+h1 {
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.button-container {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    color: white;
+    transition: background-color 0.2s ease;
+    min-width: 100px; /* Ensure consistent size */
+    text-align: center;
+}
+
+button:hover {
+    opacity: 0.9;
+}
+
+/* Specific colors for each log level */
+.log-debug {
+    background-color: #17a2b8; /* Info/Cyan */
+}
+
+.log-info {
+    background-color: #28a745; /* Success/Green */
+}
+
+.log-warning {
+    background-color: #ffc107; /* Warning/Yellow */
+    color: #333; /* Yellow needs darker text */
+}
+
+.log-error {
+    background-color: #dc3545; /* Danger/Red */
+}
+
+.log-critical {
+    background-color: #343a40; /* Dark/Blackish */
+}

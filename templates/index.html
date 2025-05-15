@@ -1,0 +1,80 @@
+{% load static %}<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Django Logging Demo</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <h1>Trigger Django Logs</h1>
+
+    <div class="button-container">
+        <button class="log-button log-debug" data-level="debug">DEBUG</button>
+        <button class="log-button log-info" data-level="info">INFO</button>
+        <button class="log-button log-warning" data-level="warning">WARNING</button>
+        <button class="log-button log-error" data-level="error">ERROR</button>
+        <button class="log-button log-critical" data-level="critical">CRITICAL</button>
+    </div>
+
+    <p id="status-message" style="margin-top: 20px; color: #555;"></p>
+
+    <script>
+        // Get the CSRF token from the cookie
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        const csrftoken = getCookie('csrftoken');
+        const statusMessage = document.getElementById('status-message');
+
+        document.querySelectorAll('.log-button').forEach(button => {
+            button.addEventListener('click', async () => {
+                const level = button.dataset.level; // Get the log level from data-level attribute
+                statusMessage.textContent = `Triggering ${level.toUpperCase()}...`;
+                statusMessage.style.color = '#555'; // Reset color
+
+                try {
+                    const response = await fetch('/log/', { // Send POST request to /log/ URL
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': csrftoken, // Include CSRF token header
+                        },
+                        body: JSON.stringify({ level: level }) // Send the level in the request body
+                    });
+
+                    const data = await response.json();
+
+                    if (response.ok) {
+                        console.log(`Server logged: ${data.level.toUpperCase()}`);
+                        statusMessage.textContent = `${data.level.toUpperCase()} log triggered successfully! Check your console/log file.`;
+                         statusMessage.style.color = 'green';
+                    } else {
+                        console.error('Error logging message:', data);
+                        statusMessage.textContent = `Failed to trigger ${level.toUpperCase()} log. See console for details.`;
+                        statusMessage.style.color = 'red';
+                    }
+
+                } catch (error) {
+                    console.error('Network or fetch error:', error);
+                    statusMessage.textContent = `An error occurred while triggering ${level.toUpperCase()}. See console.`;
+                    statusMessage.style.color = 'red';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
