@@ -1,6 +1,6 @@
 ﻿# ✨ Django Logging Demo with Frontend Trigger ✨
 
-![Uploading image.png…]()
+![django logging](https://github.com/user-attachments/assets/87367bd3-4414-45f2-9ac1-7517e8a70a63)
 
 
 This small project is a practical demonstration of how to configure and utilize Django's powerful built-in logging framework. It allows you to trigger different server-side log levels directly from a simple webpage using AJAX.
